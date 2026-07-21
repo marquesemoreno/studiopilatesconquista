@@ -282,6 +282,40 @@
   </div>
 </footer>
 
-<script>document.getElementById('year').textContent = new Date().getFullYear()</script>
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const yearSpan = document.getElementById('year');
+  if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+
+  function closeMenu() {
+    if (!mobileMenu || !menuToggle) return;
+    mobileMenu.classList.add('hidden');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  }
+
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden', !isHidden);
+      menuToggle.setAttribute('aria-expanded', String(isHidden));
+    });
+
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        closeMenu();
+      });
+    });
+  }
+
+  const path = location.pathname.replace(/\/$/, '');
+  const bookingSection = document.getElementById('agendamento-section');
+  const bookingNavLink = document.querySelector('a[href="/agendamento"]');
+  if (path === '/agendamento' || path === '/agendamento.html') {
+    closeMenu();
+    if (bookingSection) bookingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (bookingNavLink) bookingNavLink.setAttribute('aria-current', 'page');
+  }
+</script>
 </body>
 </html>
